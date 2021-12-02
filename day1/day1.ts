@@ -50,7 +50,7 @@ const part2 = (measurements: number[], windowSize: number) => {
   console.log(getNumberOfIncreasesForWindowSize(measurements, windowSize))
 }
 
-const input = fs.readFileSync('./inputs/day1/1.txt', 'utf8')
+const input = fs.readFileSync('../inputs/day1/1.txt', 'utf8')
 let measurements: number[] = input
   .split(/\n/)
   .map((measurement: string) => parseInt(measurement))
