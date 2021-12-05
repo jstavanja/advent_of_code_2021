@@ -118,6 +118,8 @@ shuffleArray(boards)
 
 let boardHits = initializeEmptyBoardHits(boards.length, boards[0][0].length, boards[0].length)
 
+let winningBoardIndices: number[] = []
+
 const runGameLoop = () => {
 	/**
 	 * Game loop
@@ -131,14 +133,17 @@ const runGameLoop = () => {
 
 		// Check for wins
 		for (let i = 0; i < boards.length; i++) {
+			if (winningBoardIndices.includes(i)) continue;
 			if (boardHasWin(boardHits[i])) {
 				const unmarkedNumbersFromBoard = getUnmarkedNumbersFromBoard(boards[i], boardHits[i])
 				const sumOfUnmarkedNumbers = sum(unmarkedNumbersFromBoard)
 				const result = sumOfUnmarkedNumbers * currentDraw;
-				console.log("Result:", result)
-				return;
+				winningBoardIndices.push(i)
+				console.log(`Result for board ${i}: ${result}`)
 			}
 		}
+
+		if (winningBoardIndices.length === boards.length) return
 	}
 }
 
