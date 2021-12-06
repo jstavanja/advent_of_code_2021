@@ -7,6 +7,13 @@ import (
 	"strings"
 )
 
+func Abs(x int) int {
+	if x < 0 {
+		return -x
+	}
+	return x
+}
+
 func main() {
 
 	content, err := ioutil.ReadFile("../inputs/day5/1.txt")
@@ -52,9 +59,7 @@ func main() {
 				matrix[i][x1]++
 			}
 
-		}
-
-		if y1 == y2 {
+		} else if y1 == y2 {
 			var startingX int
 			var endingX int
 
@@ -68,6 +73,26 @@ func main() {
 
 			for i := startingX; i <= endingX; i++ {
 				matrix[y1][i]++
+			}
+		} else if x1 < x2 {
+			if y1 <= y2 {
+				for i := 0; i <= Abs(x2-x1); i++ {
+					matrix[y1+i][x1+i]++
+				}
+			} else {
+				for i := 0; i <= Abs(x2-x1); i++ {
+					matrix[y1-i][x1+i]++
+				}
+			}
+		} else {
+			if y1 <= y2 {
+				for i := 0; i <= Abs(x2-x1); i++ {
+					matrix[y1+i][x1-i]++
+				}
+			} else {
+				for i := 0; i <= Abs(x2-x1); i++ {
+					matrix[y1-i][x1-i]++
+				}
 			}
 		}
 	}
