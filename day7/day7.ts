@@ -1,28 +1,32 @@
 import fs from 'fs';
 
-// read and parse input
+const calculateFuelNeeded = (locations: number[], useLinearFuelIncrease: boolean = false) => {
+	let lowestFuel = Number.MAX_SAFE_INTEGER;
+	for (let i = 0; i <= Math.max(...locations); i++) {
+		const usedFuelToCurrentPoint = locations
+			.map(location => {
+				let positionDifference = Math.abs(location - i);
+				if (useLinearFuelIncrease) {
+					// compute 1 + 2 + 3 + 4 ... (linear sum)
+					positionDifference = positionDifference * (positionDifference + 1) / 2
+				}
+				return positionDifference;
+			})
+			.reduce((accumulator, currentValue) => {
+				return accumulator + currentValue
+			}, 0)
+
+		if (usedFuelToCurrentPoint < lowestFuel) {
+			lowestFuel = usedFuelToCurrentPoint;
+		}
+	}
+
+	return lowestFuel
+}
+
 const input = fs.readFileSync('../inputs/day7/1.txt', 'utf8');
 const lines = input.split(/\n/);
 const locations = lines[0].split(",").map(num => parseInt(num));
 
-// find a median
-const calculateMedian = (array: number[]) => {
-	array = array.sort((a: number, b: number) => {
-		return a - b;
-	});
-	if (array.length % 2 === 0) {
-		return (array[(array.length / 2) - 1] + array[array.length / 2]) / 2;
-	}
-	else {
-		return array[(array.length - 1) / 2];
-	}
-};
-
-const median = calculateMedian(locations);
-
-// find the amount of spent fuel
-const spentFuel = locations.reduce((accumulator, currentLocation) => {
-	return accumulator + Math.abs(currentLocation - median);
-}, 0)
-
-console.log(spentFuel);
+console.log(calculateFuelNeeded(locations));
+console.log(calculateFuelNeeded(locations, true));
